@@ -178,9 +178,14 @@ if [[ $SKIP_AP_GRAPHIC_ENV -ne 1 ]]; then
   fi
 fi
 
+function is_installed() {
+     dpkg --verify "$1" 2>/dev/null
+}
+
 # Check if we need to manually install realpath
+# Skip if coreutils present
 RP=$(apt-cache search -n '^realpath$')
-if [ -n "$RP" ]; then
+if [ -n "$RP" ] && ! is_installed "coreutils"; then
     BASE_PKGS+=" realpath"
 fi
 
